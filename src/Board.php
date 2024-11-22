@@ -185,3 +185,28 @@ class Board {
             foreach ($line as $col => $value) {
                 if ($value instanceof King && $value->getColor() == $color) {
                     $from_row = $row;
+                    $from_col = $col;
+                    break;
+                }
+            }
+            if ($from_col !== null) {
+                break;
+            }
+        }
+        if ($from_col === null) {
+            return false;
+        }
+        foreach ($this->board as $row => $line) {
+            foreach ($line as $col => $value) {
+                if (!$value || $value->getColor() == $color) {
+                    continue;
+                }
+                if ($value->canAttack($row, $col, $from_row, $from_col, $this)) {
+                    return true;
+                }
+            }
+            
+        }
+        return false;
+    }
+}
