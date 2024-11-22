@@ -120,3 +120,28 @@ class Board {
         echo '   ';
         for ($i = 0; $i < 8; $i += 1) {
             echo '  ';
+            echo chr(ord('A') + $i);
+            echo ' ';
+        }
+        echo PHP_EOL;
+    }
+
+    private function changePlayer() {
+        $this->player = $this->getPlayer() === Color::White
+            ? Color::Black
+            : Color::White;
+    }
+
+    public function getPlayer(): Color {
+        return $this->player;
+    }
+
+    public function move(int $from_row, int $from_col, int $to_row, int $to_col): void {
+        $item = $this->getItem($from_row, $from_col);
+        if (!$item) {
+            throw new Exception('Фигура отсутствует');
+        }
+        if ($this->getPlayer() !== $item->getColor()) {
+            throw new Exception('Сейчас не ваш ход');
+        }
+        if ($from_col == $to_col && $from_row == $to_row) {
