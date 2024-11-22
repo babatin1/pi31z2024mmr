@@ -17,3 +17,12 @@ class Bishop extends Figure {
         $start_row = $from_row;
         while ($start_col != $to_col || $start_row != $to_row) {
             $item = $board->getItem($start_row, $start_col);
+            if ($item && $item !== $this) {
+                return false;
+            }
+            $start_col += $step_col;
+            $start_row += $step_row;
+        }
+        return true;
+    }
+}
