@@ -13,3 +13,7 @@ class Bishop extends Figure {
         }
         $step_col = ($to_col - $from_col) / $diff_col;
         $step_row = ($to_row - $from_row) / $diff_row;
+        $start_col = $from_col;
+        $start_row = $from_row;
+        while ($start_col != $to_col || $start_row != $to_row) {
+            $item = $board->getItem($start_row, $start_col);
