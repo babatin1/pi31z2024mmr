@@ -11,3 +11,18 @@ interface IFigure {
 }
 
 abstract class Figure implements IFigure {
+    private Color $color;
+    protected array $icon = [];
+
+
+    public function __construct(Color $color){
+        $this->color = $color;
+    }
+
+    public function getColor(): Color {
+        return $this->color;
+    }
+
+    public function getIcon(): string {
+        switch ($this->color) {
+            case Color::Black: $index = 0; break;
