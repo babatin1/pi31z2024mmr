@@ -145,3 +145,43 @@ class Board {
             throw new Exception('Сейчас не ваш ход');
         }
         if ($from_col == $to_col && $from_row == $to_row) {
+            throw new Exception('Мы топчимся на месте');
+        }
+        $opponent = $this->getItem($to_row, $to_col);
+        if (!$opponent) {
+            if (!$item->canMove($from_row, $from_col, $to_row, $to_col, $this)) {
+                throw new Exception('Так ' . $item->getIcon() . ' ходить не может');
+            }
+        } else if ($opponent->getColor() === $item->getColor()) {
+            throw new Exception('Мы не можем срубить свою фигуру');
+        } else {
+            if (!$item->canAttack($from_row, $from_col, $to_row, $to_col, $this)) {
+                throw new Exception('Так ' . $item->getIcon() . ' ходить не может');
+            }
+        }
+        $this->setItem($from_row, $from_col, null);
+        $this->setItem($to_row, $to_col, $item);
+        if ($this->isCheck($this->player)) {
+            $this->setItem($from_row, $from_col, $item);
+            $this->setItem($to_row, $to_col, $opponent);
+            throw new Exception('Король будет шах!');
+        }
+        $this->changePlayer();
+        if ($this->isCheck($this->player)) {
+            $message = 'Внимание! Шах королю ';
+            if ($this->getPlayer() == Color::White) {
+                $message .= 'белых';
+            } else {
+                $message .= 'черных';
+            }
+            throw new Exception($message);
+        }
+    }
+
+    protected function isCheck(Color $color) {
+        $from_row = null;
+        $from_col = null;
+        foreach ($this->board as $row => $line) {
+            foreach ($line as $col => $value) {
+                if ($value instanceof King && $value->getColor() == $color) {
+                    $from_row = $row;
