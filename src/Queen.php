@@ -38,4 +38,4 @@ class Queen extends Figure {
         }
         return true;
     }
-}.
+}
